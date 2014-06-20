@@ -11,11 +11,6 @@ import (
 	"net"
 	"os"
 	"sync"
-
-	"gridd/api"
-	"gridd/grid"
-	"gridd/proto"
-	"gridd/store"
 )
 
 func main() {
@@ -45,36 +40,36 @@ func main() {
 	serviceGroup := &sync.WaitGroup{}
 
 	// Open databases
-	db := store.NewStore("./private.db", "./public.db")
+	db := NewStore("./private.db", "./public.db")
 	if err = db.Open(); err != nil {
 		panic(err)
 	}
 	defer db.Close()
 
-	addr1, err := proto.NewAddress(1, 0)
+	addr1, err := NewAddress(1, 0)
 	if err != nil {
 		panic(err)
 	}
 	db.SaveAddress(addr1)
 
 	// Start Json API service
-	apiService := &api.JsonService{make(chan *api.RequestType), make(chan *api.ReplyType)}
+	apiService := &JsonService{make(chan *RequestType), make(chan *ReplyType)}
 	go apiService.Run(serviceGroup)
 
 	// Start listen service
-	listenService := &grid.ListenService{uint16(*port), make(chan net.Conn), make(chan struct{})}
+	listenService := &ListenService{uint16(*port), make(chan net.Conn), make(chan struct{})}
 	go listenService.Run(serviceGroup)
 
 	// Start connect service
-	connectService := &grid.ConnectService{make(chan string), make(chan net.Conn)}
+	connectService := &ConnectService{make(chan string), make(chan net.Conn)}
 	go connectService.Run(serviceGroup)
 
 	// Start handshake service
-	handshakeService := &grid.HandshakeService{make(chan net.Conn)}
+	handshakeService := &HandshakeService{make(chan net.Conn)}
 	go handshakeService.Run(serviceGroup)
 
 	// Start initiate handshake service
-	initiateHandshakeService := &grid.InitiateHandshakeService{make(chan net.Conn)}
+	initiateHandshakeService := &InitiateHandshakeService{make(chan net.Conn)}
 	go initiateHandshakeService.Run(serviceGroup)
 
 L1:
@@ -103,7 +98,7 @@ L1:
 
 				case "peers":
 
-					rep := new(api.ReplyType)
+					rep := new(ReplyType)
 					rep.Reply = "peers"
 
 					for i := 0; i < len(peers); i++ {
@@ -121,7 +116,7 @@ L1:
 				case "addresses":
 
 					// FIXME: faking a few addresses
-					rep := new(api.ReplyType)
+					rep := new(ReplyType)
 					rep.Reply = "addresses"
 
 					rep.Items = append(rep.Items, make(map[string]string))

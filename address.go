@@ -2,7 +2,7 @@
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
 // Dag Robøle (dag.robole AT gmail DOT com)
 
-package proto
+package main
 
 import (
 	"bytes"
@@ -12,7 +12,6 @@ import (
 	"errors"
 	"strings"
 
-	"gridd/bits"
 	"gridd/enc"
 )
 
@@ -39,7 +38,7 @@ func NewAddress(version, privacy byte) (*Address, error) {
 	ident.WriteByte(addr.Privacy)
 	ident.Write(addr.Key.PublicKey.X.Bytes())
 	ident.Write(addr.Key.PublicKey.Y.Bytes())
-	cs, err := bits.Checksum(ident.Bytes(), 2)
+	cs, err := Checksum(ident.Bytes(), 2)
 	if err != nil {
 		return nil, errors.New("address.NewAddress: Error generating checksum: " + err.Error())
 	}
@@ -78,7 +77,7 @@ func ValidateAddress(identifier string) (bool, error) {
 	}
 	ident := raw[:len(raw)-2]
 	cs1 := raw[len(raw)-2:]
-	cs2, err := bits.Checksum(ident, 2)
+	cs2, err := Checksum(ident, 2)
 	if err != nil {
 		return false, errors.New("address.ValidateChecksum: Error generating checksum: " + err.Error())
 	}

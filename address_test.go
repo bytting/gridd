@@ -1,4 +1,4 @@
-package proto
+package main
 
 import (
 	"testing"
@@ -11,11 +11,11 @@ func TestAddress(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	if !ValidateIdentifier(addr.Identifier) {
+	if !ValidateAddressIdentifier(addr.Identifier) {
 		t.Error("Invalid address identifier", addr.Identifier)
 	}
 
-	valid, err := ValidateChecksum(addr.Identifier)
+	valid, err := ValidateAddress(addr.Identifier)
 	if err != nil {
 		t.Error(err.Error())
 	}

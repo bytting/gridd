@@ -2,7 +2,7 @@
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
 // Dag Robøle (dag.robole AT gmail DOT com)
 
-package store
+package main
 
 import (
 	"database/sql"
@@ -10,7 +10,6 @@ import (
 
 	_ "github.com/mattn/go-sqlite3"
 	"gridd/enc"
-	"gridd/proto"
 )
 
 type store struct {
@@ -76,7 +75,7 @@ func (s *store) Close() {
 	s.pub.Close()
 }
 
-func (s *store) SaveAddress(addr *proto.Address) error {
+func (s *store) SaveAddress(addr *Address) error {
 
 	tx, err := s.priv.Begin()
 	if err != nil {

@@ -2,7 +2,7 @@
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
 // Dag Robøle (dag.robole AT gmail DOT com)
 
-package bits
+package main
 
 import (
 	"crypto/rand"
