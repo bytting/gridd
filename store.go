@@ -8,8 +8,8 @@ import (
 	"database/sql"
 	"os"
 
+	"github.com/corebob/gridd/enc"
 	_ "github.com/mattn/go-sqlite3"
-	"gridd/enc"
 )
 
 type store struct {

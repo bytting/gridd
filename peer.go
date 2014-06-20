@@ -4,11 +4,6 @@
 
 package main
 
-import (
-//"bytes"
-//"errors"
-)
-
 type Peer struct {
 	IP        string
 	Port      uint16

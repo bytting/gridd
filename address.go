@@ -12,7 +12,7 @@ import (
 	"errors"
 	"strings"
 
-	"gridd/enc"
+	"github.com/corebob/gridd/enc"
 )
 
 type Address struct {
