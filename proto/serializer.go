@@ -1,6 +1,6 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
 package proto
 

@@ -1,8 +1,8 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
-package wif
+package enc
 
 import (
 	"bytes"
@@ -11,11 +11,9 @@ import (
 	"crypto/sha256"
 	"errors"
 	"math/big"
-
-	"gridd/bits/encoding/base58"
 )
 
-func Encode(keys *ecdsa.PrivateKey) (string, error) {
+func EncodeWif(keys *ecdsa.PrivateKey) (string, error) {
 
 	var extended bytes.Buffer
 	extended.WriteByte(byte(0x80))
@@ -25,20 +23,20 @@ func Encode(keys *ecdsa.PrivateKey) (string, error) {
 	sha2.Write(sha1.Sum(nil))
 	checksum := sha2.Sum(nil)[:4]
 	extended.Write(checksum)
-	encoded, err := base58.Encode(extended.Bytes())
+	encoded, err := EncodeBase58(extended.Bytes())
 	if err != nil {
 		return "", err
 	}
 	return encoded, nil
 }
 
-func Decode(wif string) (*ecdsa.PrivateKey, error) {
+func DecodeWif(wif string) (*ecdsa.PrivateKey, error) {
 
 	if len(wif) < 6 {
 		return nil, errors.New("wif.Decode: wif is too short")
 	}
 
-	extended, err := base58.Decode(wif)
+	extended, err := DecodeBase58(wif)
 	if err != nil {
 		return nil, err
 	}
@@ -57,13 +55,13 @@ func Decode(wif string) (*ecdsa.PrivateKey, error) {
 	return keys, nil
 }
 
-func ValidateChecksum(wif string) (bool, error) {
+func ValidateWif(wif string) (bool, error) {
 
 	if len(wif) < 6 {
 		return false, errors.New("wif.Validate: wif is too short")
 	}
 
-	extended, err := base58.Decode(wif)
+	extended, err := DecodeBase58(wif)
 	if err != nil {
 		return false, err
 	}

@@ -1,6 +1,6 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
 package proto
 
@@ -13,7 +13,7 @@ import (
 	"strings"
 
 	"gridd/bits"
-	"gridd/bits/encoding/base58"
+	"gridd/enc"
 )
 
 type Address struct {
@@ -45,7 +45,7 @@ func NewAddress(version, privacy byte) (*Address, error) {
 	}
 	ident.Write(cs)
 
-	ident58, err := base58.Encode(ident.Bytes())
+	ident58, err := enc.EncodeBase58(ident.Bytes())
 	if err != nil {
 		return nil, errors.New("address.NewAddress: Error base58 encoding: " + err.Error())
 	}
@@ -53,7 +53,7 @@ func NewAddress(version, privacy byte) (*Address, error) {
 	return addr, nil
 }
 
-func ValidateIdentifier(identifier string) bool {
+func ValidateAddressIdentifier(identifier string) bool {
 
 	if len(identifier) < 7 { // LM: + version + privacy + checksum
 		return false
@@ -66,13 +66,13 @@ func ValidateIdentifier(identifier string) bool {
 	return true
 }
 
-func ValidateChecksum(identifier string) (bool, error) {
+func ValidateAddress(identifier string) (bool, error) {
 
-	if !ValidateIdentifier(identifier) {
+	if !ValidateAddressIdentifier(identifier) {
 		return false, nil
 	}
 
-	raw, err := base58.Decode(identifier[3:])
+	raw, err := enc.DecodeBase58(identifier[3:])
 	if err != nil {
 		return false, errors.New("address.ValidateChecksum: Error base58 decoding: " + err.Error())
 	}

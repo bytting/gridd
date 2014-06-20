@@ -1,3 +1,7 @@
+// LICENSE: GNU General Public License version 2
+// CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
+// Dag Robøle (dag.robole AT gmail DOT com)
+
 package store
 
 import (
@@ -5,7 +9,7 @@ import (
 	"os"
 
 	_ "github.com/mattn/go-sqlite3"
-	"gridd/bits/encoding/wif"
+	"gridd/enc"
 	"gridd/proto"
 )
 
@@ -84,7 +88,7 @@ func (s *store) SaveAddress(addr *proto.Address) error {
 	}
 	defer stmt.Close()
 
-	w, err := wif.Encode(addr.Key)
+	w, err := enc.EncodeWif(addr.Key)
 	if err != nil {
 		return err
 	}

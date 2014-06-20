@@ -1,11 +1,13 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
 package bits
 
 import (
+	"crypto/rand"
 	"errors"
+	"io"
 )
 
 func Checksum(p []byte, n int) ([]byte, error) {
@@ -26,4 +28,26 @@ func Checksum(p []byte, n int) ([]byte, error) {
 	}
 
 	return check, nil
+}
+
+/* Generates a block of random bits */
+func RandomBytes(size int) ([]byte, error) {
+
+	b := make([]byte, size)
+	_, err := io.ReadFull(rand.Reader, b)
+	if err != nil {
+		b = nil
+	}
+
+	return b, err
+}
+
+func Entropy192() ([]byte, error) {
+
+	b, err := RandomBytes(24)
+	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
 }

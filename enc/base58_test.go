@@ -1,13 +1,13 @@
-package base58
+package enc
 
 import (
 	"bytes"
 	"math/rand"
-	"time"
 	"testing"
+	"time"
 )
 
-func TestEncodeAndDecode(t *testing.T) {
+func TestBase58(t *testing.T) {
 
 	if testing.Short() {
 		t.Skip("skipping test in short mode.")
@@ -30,23 +30,23 @@ func TestEncodeAndDecode(t *testing.T) {
 		t.Errorf("Decoded base58 does not match. Expected %s, got %s", buf.String(), string(decoded))
 	}
 
-	b := []byte{0, 0, 0, 1, 2, 3}		
-	encoded, _ = Encode(b)			
-	decoded, _ = Decode(encoded)	
+	b := []byte{0, 0, 0, 1, 2, 3}
+	encoded, _ = Encode(b)
+	decoded, _ = Decode(encoded)
 	if bytes.Compare(b, decoded) != 0 {
 		t.Error("Decoded base58 with zeros does not match")
-	}	
-	
-	for j := 0; j < 10; j++ {		
-		r := rand.New(rand.NewSource(time.Now().UnixNano()))	
+	}
+
+	for j := 0; j < 10; j++ {
+		r := rand.New(rand.NewSource(time.Now().UnixNano()))
 		b2 := make([]byte, 253)
 		for i := 0; i < len(b2); i++ {
 			b2[i] = byte(r.Int())
 		}
-		encoded, _ = Encode(b2)			
-		decoded, _ = Decode(encoded)	
+		encoded, _ = Encode(b2)
+		decoded, _ = Decode(encoded)
 		if bytes.Compare(b2, decoded) != 0 {
 			t.Error("Decoded base58 with rand does not match")
-		}		
+		}
 	}
 }

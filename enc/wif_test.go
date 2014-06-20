@@ -1,4 +1,4 @@
-package wif
+package enc
 
 import (
 	"bytes"
@@ -19,12 +19,12 @@ func TestWIF(t *testing.T) {
 		t.Error(err.Error())
 	}
 
-	wif, err := Encode(keys1)
+	wif, err := EncodeWif(keys1)
 	if err != nil {
 		t.Error(err.Error())
 	}
 
-	keys2, err := Decode(wif)
+	keys2, err := DecodeWif(wif)
 	if err != nil {
 		t.Error(err.Error())
 	}
@@ -45,7 +45,7 @@ func TestWIF(t *testing.T) {
 		t.Error("Public point is not on curve\n")
 	}
 
-	ok, err := ValidateChecksum(wif)
+	ok, err := ValidateWif(wif)
 	if err != nil {
 		t.Error(err.Error())
 	}

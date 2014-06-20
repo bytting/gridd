@@ -1,8 +1,8 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
-package base58
+package enc
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ const (
 	alphabet58 = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz"
 )
 
-func Encode(b []byte) (string, error) {
+func EncodeBase58(b []byte) (string, error) {
 
 	if len(b) < 1 {
 		return "", errors.New("base58.Encode: Byte slice is too short")
@@ -40,12 +40,12 @@ func Encode(b []byte) (string, error) {
 		n.Div(n, base) // FIXME: Use DivMod
 		buffer.WriteByte(alphabet58[r.Uint64()])
 	}
-	
+
 	length := len(b)
-    for i := 0; i < length && b[i] == 0; i++ {
-		buffer.WriteByte(alphabet58[0])		
-	}        
-		
+	for i := 0; i < length && b[i] == 0; i++ {
+		buffer.WriteByte(alphabet58[0])
+	}
+
 	length = len(buffer.Bytes())
 	for i := 0; i < length/2; i++ {
 		buffer.Bytes()[i], buffer.Bytes()[length-1-i] = buffer.Bytes()[length-1-i], buffer.Bytes()[i]
@@ -54,7 +54,7 @@ func Encode(b []byte) (string, error) {
 	return buffer.String(), nil
 }
 
-func Decode(encoded string) ([]byte, error) {
+func DecodeBase58(encoded string) ([]byte, error) {
 
 	bn := big.NewInt(0)
 	base := big.NewInt(58)
@@ -70,13 +70,13 @@ func Decode(encoded string) ([]byte, error) {
 		bn.Mul(bn, base)
 		bn.Add(bn, tmp)
 	}
-	
+
 	var buf bytes.Buffer
 	length := len(encoded)
-    for i := 0; i < length && encoded[i] == alphabet58[0]; i++ {
-		buf.WriteByte(0)		
+	for i := 0; i < length && encoded[i] == alphabet58[0]; i++ {
+		buf.WriteByte(0)
 	}
-	buf.Write(bn.Bytes())	
+	buf.Write(bn.Bytes())
 
 	return buf.Bytes(), nil
 }

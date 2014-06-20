@@ -1,6 +1,6 @@
 // LICENSE: GNU General Public License version 2
 // CONTRIBUTORS AND COPYRIGHT HOLDERS (c) 2013:
-// Dag Robøle (go.libremail AT gmail DOT com)
+// Dag Robøle (dag.robole AT gmail DOT com)
 
 package grid
 
@@ -94,7 +94,9 @@ func (cs *ConnectService) Run(serviceGroup *sync.WaitGroup) {
 	for {
 		addr, ok := <-cs.AddressChan
 
-		if !ok { return }
+		if !ok {
+			return
+		}
 
 		conn, err := net.Dial("tcp", addr)
 
@@ -127,7 +129,9 @@ func (hs *HandshakeService) Run(serviceGroup *sync.WaitGroup) {
 	for {
 		connection, ok := <-hs.ConnectionChan
 
-		if !ok { return }
+		if !ok {
+			return
+		}
 
 		log.Println("Doing handshake with", connection.RemoteAddr())
 		// TODO: Handshaking
@@ -154,7 +158,9 @@ func (ihs *InitiateHandshakeService) Run(serviceGroup *sync.WaitGroup) {
 	for {
 		connection, ok := <-ihs.ConnectionChan
 
-		if !ok { return }
+		if !ok {
+			return
+		}
 
 		log.Println("Initiating handshake with", connection.RemoteAddr())
 		// TODO: Handshaking
