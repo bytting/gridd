@@ -66,7 +66,6 @@ func (ls *ListenService) Run(serviceGroup *sync.WaitGroup) {
 			} else {
 
 				log.Fatalln("grid.ListenService.Run:", err)
-				return
 			}
 		}
 

@@ -4,5 +4,5 @@ import (
 	"testing"
 )
 
-func TestGrid(t *testing.T) {
+func TestNet(t *testing.T) {
 }
